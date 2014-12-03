@@ -58,7 +58,7 @@
   1.使用句柄：引用上的地址稳定，不随对象的移动而更新
   2.使用直接指针：速度快，省去一次指向操作的开销
   
-![p3-5](images/p3-5.png)
+![p3-5](https://github.com/nicelife729/markdownNote/raw/master/note/jvm/image/p3-5.png)
 
 
 
