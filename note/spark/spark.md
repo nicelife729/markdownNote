@@ -111,11 +111,17 @@ sudo vim /etc/hosts #在每台主机的hosts文件中加入集群中所有的主
       4. 增加环境变量  
                 ```
 export HADOOP_HOME=/home/spark/hadoop/hadoop-2.4.0
+
 export HADOOP_MAPRED_HOME=$HADOOP_HOME
+
 export HADOOP_COMMON_HOME=$HADOOP_HOME
+
 export HADOOP_HDFS_HOME=$HADOOP_HOME
+
 export YARN_HOME=$HADOOP_HOME
+
 export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop
+
                 ```
       5. 创建nameNode和dataNode目录
                 ```
