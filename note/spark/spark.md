@@ -91,11 +91,13 @@ spark可以运行于Hadoop YARN或者Apache Mesos上。
     4. 安装hadoop
         1. 下载地址： https://archive.apache.org/dist/hadoop/core/hadoop-2.4.0/hadoop-2.4.0.tar.gz ,解压到/home/spark/hadoop/hadoop-2.4.0
         2. 配置无密码登录
-           1. 在～/.ssh/下执行ssh-keygen -t rsa
-           2. 然后执行ssh-copy-id -i id_rsa.pub spark@172.16.236.44 将公钥拷贝集群中所有的机器上
+           1. 在～/.ssh/下执行`ssh-keygen -t rsa`
+           2. 然后执行`ssh-copy-id -i id_rsa.pub spark@172.16.236.44`将公钥拷贝集群中所有的机器上
         3. 配置host
+          ```
           sudo vim /etc/hostname #给每台机器分配主机名
           sudo vim /etc/hosts #在每台主机的hosts文件中加入集群中所有的主机名
+          ```
         4. 增加环境变量
           ```
           export HADOOP_HOME=/home/spark/hadoop/hadoop-2.4.0
@@ -106,14 +108,14 @@ spark可以运行于Hadoop YARN或者Apache Mesos上。
           export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop
           ```
         5. 创建nameNode和dataNode目录
-          `
+          ```
           mkdir -p $HADOOP_HOME/yarn/yarn_data/hdfs/datanode
           mkdir -p $HADOOP_HOME/yarn/yarn_data/hdfs/namenode
           mkdir -p $HADOOP_HOME/yarn/tmp
-          `
+          ```
         6. 修改配置文件（slaves、core-site.xml、hdfs-site.xml、mapred-site.xml、yarn-site.xml ）
               1. yarn-site.xml
-                  vi $HADOOP_HOME/etc/hadoop/yarn-site.xml
+                  `vi $HADOOP_HOME/etc/hadoop/yarn-site.xml`
                   在<configuration>标签中加入以下内容：
                   `
                   <property>
@@ -146,7 +148,7 @@ spark可以运行于Hadoop YARN或者Apache Mesos上。
                   </property>
                   `
               2. core-site.xml
-                  vi $HADOOP_HOME/etc/hadoop/core-site.xml
+                  ```vi $HADOOP_HOME/etc/hadoop/core-site.xml```
                   在<configuration>标签中加入下面内容在配置：
                   `
                   <property>
@@ -172,9 +174,11 @@ spark可以运行于Hadoop YARN或者Apache Mesos上。
                   </property>
                    ` 
               3. hdfs-stie.xml
+              ```
                   vi $HADOOP_HOME/etc/hadoop/hdfs-site.xml
+              ```
                   在<configuration>标签中加入下面内容在配置：
-                  `
+                  ```
                   <property>
                       <name>dfs.namenode.secondary.http-address</name>
                       <value>impala43:9001</value>
@@ -195,12 +199,14 @@ spark可以运行于Hadoop YARN或者Apache Mesos上。
                       <name>dfs.webhdfs.enabled</name>
                       <value>true</value>
                   </property>
-                  `
+                  ```
               4. mapred-site.xml
+                  ```
                   mv mapred-site.xml.template mapred-site.xml 
                   vim mapred-site.xml
+                  ```
                   在<configuration>标签中加入下面内容在配置：
-                  `
+                  ```
                   <property>
                       <name>mapreduce.framework.name</name>
                       <value>yarn</value>
@@ -213,20 +219,25 @@ spark可以运行于Hadoop YARN或者Apache Mesos上。
                       <name>mapreduce.jobhistory.webapp.address</name>
                       <value>impala43:19888</value>
                   </property>
-                  `
+                  ```
               5. slaves
-                  vi $HADOOP_HOME/etc/hadoop/slaves
+                  `vi $HADOOP_HOME/etc/hadoop/slaves`
                   将原来localhost删除，把所有Slave的主机名写上，每行一个
     5.运行hadoop
-        1. 执行 bin/hdfs namenode -format       # 首次运行需要执行一次文件系统的初始化，后面不再需要
-        2. sbin/start-dfs.sh
-           sbin/start-yarn.sh
-
+        1. 执行 `bin/hdfs namenode -format       # 首次运行需要执行一次文件系统的初始化，后面不再需要`
+        2. 
+        ```
+        sbin/start-dfs.sh
+        sbin/start-yarn.sh
+        ```
 ##2.使用
 
-- 通过SHELL执行任务（scala）:./bin/spark-shell
-- 通过提交任务jar包:./spark-submit
+- 通过SHELL执行任务（scala）:
+```./bin/spark-shell```
+- 通过提交任务jar包:
+```./spark-submit```
   - 用法：
+  ```
     ./bin/spark-submit 
       --class <main-class>
       --master <master-url> 
@@ -235,14 +246,14 @@ spark可以运行于Hadoop YARN或者Apache Mesos上。
       ... 
       <application-jar> 
       [application-arguments]
-      
+  ```    
       master表示要集群地址或者local
 - eg:
-`
+```
 SPARK_JAR=./assembly/target/scala-2.10/spark-assembly-1.1.1-hadoop2.4.0.jar
 HADOOP_CONF_DIR=/home/spark/hadoop/hadoop-2.4.0/etc/hadoop 
 ./bin/spark-submit --master yarn --deploy-mode cluster --class org.apache.spark.examples.SparkPi --num-executors 3 --driver-memory 4g --executor-memory 2g --executor-cores 1 examples/target/scala-2.10/spark-examples-1.1.1-hadoop2.4.0.jar
-`
+```
         
 ##3.监控
 
@@ -251,21 +262,21 @@ HADOOP_CONF_DIR=/home/spark/hadoop/hadoop-2.4.0/etc/hadoop
 
 ##4.java编程指导
   1. 初始化spark
-      - eg:
-      ``
+      - eg:  
+      ```
       SparkConf conf = new SparkConf().setAppName(appName).setMaster(master);
       JavaSparkContext sc = new JavaSparkContext(conf);
-      ``
+      ```
   
   2. 构建RDD对象
     - 法1 Parallelized Collections
-      - eg : 
+      - eg :   
     ```
       List<Integer> data = Arrays.asList(1, 2, 3, 4, 5);
       JavaRDD<Integer> distData = sc.parallelize(data);//sc.parallelize(data, 10); 10 是手工指定的slice（切片）数
     ```
     - 法2 External Datasets
-      - eg：
+      - eg：  
     ```
       JavaRDD<String> distFile = sc.textFile("data.txt");//sc.textFile("data.txt", 128); 128 是手工指定的slice（切片）数,对于HDFS默认值是64M
     ```
@@ -321,7 +332,7 @@ HADOOP_CONF_DIR=/home/spark/hadoop/hadoop-2.4.0/etc/hadoop
         - persist（） 当第一次运行完成后，调用该方法的rdd对象会保存在内存中
         - cache（） 是持久化的一种特例，即
   5. 给spark传递一个函数
-    - 方法： 给操作RDD对象的方法传递一个Function匿名内部类，其中的call方法实现计算逻辑
+    - 方法： 给操作RDD对象的方法传递一个Function匿名内部类，其中的call方法实现计算逻辑  
   ```
   JavaRDD<String> lines = sc.textFile("data.txt");
   JavaRDD<Integer> lineLengths = lines.map(new Function<String, Integer>() {
@@ -335,13 +346,11 @@ HADOOP_CONF_DIR=/home/spark/hadoop/hadoop-2.4.0/etc/hadoop
   6. 操作键值对
     - 用scala.Tuple2对象来包装一个键值对，`new Tuple2(a,b)`创建；tuple._1(),tuble._2()访问键和值
     - RDD采用键值对对象为JavaPairRDD
-    - eg：统计一个文件中同样的行出现的次数
+    - eg：统计一个文件中同样的行出现的次数  
     ```
       JavaRDD<String> lines = sc.textFile("data.txt");
       JavaPairRDD<String, Integer> pairs = lines.mapToPair(s -> new Tuple2(s, 1));
       JavaPairRDD<String, Integer> counts = pairs.reduceByKey((a, b) -> a + b);
     ```
-    
-  7. 
 
 #三、常见问题
