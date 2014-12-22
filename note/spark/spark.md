@@ -112,141 +112,144 @@ spark可以运行于Hadoop YARN或者Apache Mesos上。
           mkdir -p $HADOOP_HOME/yarn/tmp
           `
         6. 修改配置文件（slaves、core-site.xml、hdfs-site.xml、mapred-site.xml、yarn-site.xml ）
-            1. yarn-site.xml
-          vi $HADOOP_HOME/etc/hadoop/yarn-site.xml
-          在<configuration>标签中加入以下内容：
-          `
-          <property>
-              <name>yarn.nodemanager.aux-services</name>
-              <value>mapreduce_shuffle</value>
-          </property>
-          <property>
-              <name>yarn.nodemanager.aux-services.mapreduce.shuffle.class</name>
-              <value>org.apache.hadoop.mapred.ShuffleHandler</value>
-          </property>
-          <property>
-              <name>yarn.resourcemanager.address</name>
-              <value>impala43:8032</value>
-          </property>
-          <property>
-              <name>yarn.resourcemanager.scheduler.address</name>
-              <value>impala43:8030</value>
-          </property>
-          <property>
-              <name>yarn.resourcemanager.resource-tracker.address</name>
-              <value>impala43:8031</value>
-          </property>
-          <property>
-              <name>yarn.resourcemanager.admin.address</name>
-              <value>impala43:8033</value>
-          </property>
-          <property>
-              <name>yarn.resourcemanager.webapp.address</name>
-              <value>impala43:8088</value>
-          </property>
-          `
-            2. core-site.xml
-          vi $HADOOP_HOME/etc/hadoop/core-site.xml
-          在<configuration>标签中加入下面内容在配置：
-          `
-          <property>
-              <name>fs.defaultFS</name>
-              <value>hdfs://impala43:9000</value>
-          </property>
-          <property>
-              <name>io.file.buffer.size</name>
-              <value>131072</value>
-          </property>
-          <property>
-              <name>hadoop.tmp.dir</name>
-              <value>file:/home/spark/hadoop/hadoop-2.4.0/yarn/tmp</value>
-              <description>Abase for other temporary directories.</description>
-          </property>
-          <property>
-              <name>hadoop.proxyuser.hduser.hosts</name>
-              <value>*</value>
-          </property>
-          <property>
-              <name>hadoop.proxyuser.hduser.groups</name>
-              <value>*</value>
-          </property>
-           ` 
-           3. hdfs-stie.xml
-            vi $HADOOP_HOME/etc/hadoop/hdfs-site.xml
-            在<configuration>标签中加入下面内容在配置：
-            `
-            <property>
-                <name>dfs.namenode.secondary.http-address</name>
-                <value>impala43:9001</value>
-            </property>
-            <property>
-                <name>dfs.namenode.name.dir</name>
-                <value>file:/home/spark/hadoop/hadoop-2.4.0/yarn/yarn_data/hdfs/namenode</value>
-            </property>
-            <property>
-                <name>dfs.datanode.data.dir</name>
-                <value>file:/home/spark/hadoop/hadoop-2.4.0/yarn/yarn_data/hdfs/datanode</value>
-            </property>
-            <property>
-                <name>dfs.replication</name>
-                <value>1</value>
-            </property>
-            <property>
-                <name>dfs.webhdfs.enabled</name>
-                <value>true</value>
-            </property>
-            `
-            4. mapred-site.xml
-            mv mapred-site.xml.template mapred-site.xml 
-            vim mapred-site.xml
-            在<configuration>标签中加入下面内容在配置：
-            `
-            <property>
-                <name>mapreduce.framework.name</name>
-                <value>yarn</value>
-            </property>
-            <property>
-                <name>mapreduce.jobhistory.address</name>
-                <value>impala43:10020</value>
-            </property>
-            <property>
-                <name>mapreduce.jobhistory.webapp.address</name>
-                <value>impala43:19888</value>
-            </property>
-            `
-            5. slaves
-            vi $HADOOP_HOME/etc/hadoop/slaves
-            将原来localhost删除，把所有Slave的主机名写上，每行一个
+              1. yarn-site.xml
+                  vi $HADOOP_HOME/etc/hadoop/yarn-site.xml
+                  在<configuration>标签中加入以下内容：
+                  `
+                  <property>
+                      <name>yarn.nodemanager.aux-services</name>
+                      <value>mapreduce_shuffle</value>
+                  </property>
+                  <property>
+                      <name>yarn.nodemanager.aux-services.mapreduce.shuffle.class</name>
+                      <value>org.apache.hadoop.mapred.ShuffleHandler</value>
+                  </property>
+                  <property>
+                      <name>yarn.resourcemanager.address</name>
+                      <value>impala43:8032</value>
+                  </property>
+                  <property>
+                      <name>yarn.resourcemanager.scheduler.address</name>
+                      <value>impala43:8030</value>
+                  </property>
+                  <property>
+                      <name>yarn.resourcemanager.resource-tracker.address</name>
+                      <value>impala43:8031</value>
+                  </property>
+                  <property>
+                      <name>yarn.resourcemanager.admin.address</name>
+                      <value>impala43:8033</value>
+                  </property>
+                  <property>
+                      <name>yarn.resourcemanager.webapp.address</name>
+                      <value>impala43:8088</value>
+                  </property>
+                  `
+              2. core-site.xml
+                  vi $HADOOP_HOME/etc/hadoop/core-site.xml
+                  在<configuration>标签中加入下面内容在配置：
+                  `
+                  <property>
+                      <name>fs.defaultFS</name>
+                      <value>hdfs://impala43:9000</value>
+                  </property>
+                  <property>
+                      <name>io.file.buffer.size</name>
+                      <value>131072</value>
+                  </property>
+                  <property>
+                      <name>hadoop.tmp.dir</name>
+                      <value>file:/home/spark/hadoop/hadoop-2.4.0/yarn/tmp</value>
+                      <description>Abase for other temporary directories.</description>
+                  </property>
+                  <property>
+                      <name>hadoop.proxyuser.hduser.hosts</name>
+                      <value>*</value>
+                  </property>
+                  <property>
+                      <name>hadoop.proxyuser.hduser.groups</name>
+                      <value>*</value>
+                  </property>
+                   ` 
+              3. hdfs-stie.xml
+                  vi $HADOOP_HOME/etc/hadoop/hdfs-site.xml
+                  在<configuration>标签中加入下面内容在配置：
+                  `
+                  <property>
+                      <name>dfs.namenode.secondary.http-address</name>
+                      <value>impala43:9001</value>
+                  </property>
+                  <property>
+                      <name>dfs.namenode.name.dir</name>
+                      <value>file:/home/spark/hadoop/hadoop-2.4.0/yarn/yarn_data/hdfs/namenode</value>
+                  </property>
+                  <property>
+                      <name>dfs.datanode.data.dir</name>
+                      <value>file:/home/spark/hadoop/hadoop-2.4.0/yarn/yarn_data/hdfs/datanode</value>
+                  </property>
+                  <property>
+                      <name>dfs.replication</name>
+                      <value>1</value>
+                  </property>
+                  <property>
+                      <name>dfs.webhdfs.enabled</name>
+                      <value>true</value>
+                  </property>
+                  `
+              4. mapred-site.xml
+                  mv mapred-site.xml.template mapred-site.xml 
+                  vim mapred-site.xml
+                  在<configuration>标签中加入下面内容在配置：
+                  `
+                  <property>
+                      <name>mapreduce.framework.name</name>
+                      <value>yarn</value>
+                  </property>
+                  <property>
+                      <name>mapreduce.jobhistory.address</name>
+                      <value>impala43:10020</value>
+                  </property>
+                  <property>
+                      <name>mapreduce.jobhistory.webapp.address</name>
+                      <value>impala43:19888</value>
+                  </property>
+                  `
+              5. slaves
+                  vi $HADOOP_HOME/etc/hadoop/slaves
+                  将原来localhost删除，把所有Slave的主机名写上，每行一个
     5.运行hadoop
         1. 执行 bin/hdfs namenode -format       # 首次运行需要执行一次文件系统的初始化，后面不再需要
         2. sbin/start-dfs.sh
            sbin/start-yarn.sh
-##2. 使用
-        - 通过SHELL执行任务（scala）:./bin/spark-shell
-        - 通过提交任务jar包:./spark-submit
-          - 用法：
-            ./bin/spark-submit 
-              --class <main-class>
-              --master <master-url> 
-              --deploy-mode <deploy-mode> 
-              --conf <key>=<value> 
-              ... 
-              <application-jar> 
-              [application-arguments]
-              
-              master表示要集群地址或者local
-        eg:
-        `
-        SPARK_JAR=./assembly/target/scala-2.10/spark-assembly-1.1.1-hadoop2.4.0.jar
-        HADOOP_CONF_DIR=/home/spark/hadoop/hadoop-2.4.0/etc/hadoop 
-        ./bin/spark-submit --master yarn --deploy-mode cluster --class org.apache.spark.examples.SparkPi --num-executors 3 --driver-memory 4g --executor-memory 2g --executor-cores 1 examples/target/scala-2.10/spark-examples-1.1.1-hadoop2.4.0.jar
-        `
-##3. 监控
+
+##2.使用
+
+- 通过SHELL执行任务（scala）:./bin/spark-shell
+- 通过提交任务jar包:./spark-submit
+  - 用法：
+    ./bin/spark-submit 
+      --class <main-class>
+      --master <master-url> 
+      --deploy-mode <deploy-mode> 
+      --conf <key>=<value> 
+      ... 
+      <application-jar> 
+      [application-arguments]
+      
+      master表示要集群地址或者local
+- eg:
+`
+SPARK_JAR=./assembly/target/scala-2.10/spark-assembly-1.1.1-hadoop2.4.0.jar
+HADOOP_CONF_DIR=/home/spark/hadoop/hadoop-2.4.0/etc/hadoop 
+./bin/spark-submit --master yarn --deploy-mode cluster --class org.apache.spark.examples.SparkPi --num-executors 3 --driver-memory 4g --executor-memory 2g --executor-cores 1 examples/target/scala-2.10/spark-examples-1.1.1-hadoop2.4.0.jar
+`
+        
+##3.监控
 
 - 当使用shell方式运行任务时，监控task、executors、storage使用状况，使用地址：http://nodeIp:4040/
 - 当使用spark On Yarn时，使用地址：http://172.16.236.43:8088/cluster
 
-##4. java编程指导
+##4.java编程指导
   1. 初始化spark
       - eg:
       ``
