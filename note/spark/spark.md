@@ -111,17 +111,11 @@ sudo vim /etc/hosts #在每台主机的hosts文件中加入集群中所有的主
       4. 增加环境变量  
                 ```
 export HADOOP_HOME=/home/spark/hadoop/hadoop-2.4.0
-
 export HADOOP_MAPRED_HOME=$HADOOP_HOME
-
 export HADOOP_COMMON_HOME=$HADOOP_HOME
-
 export HADOOP_HDFS_HOME=$HADOOP_HOME
-
 export YARN_HOME=$HADOOP_HOME
-
 export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop
-
                 ```
       5. 创建nameNode和dataNode目录
                 ```
@@ -130,9 +124,9 @@ mkdir -p $HADOOP_HOME/yarn/yarn_data/hdfs/namenode
 mkdir -p $HADOOP_HOME/yarn/tmp
                 ```
       6. 修改配置文件（slaves、core-site.xml、hdfs-site.xml、mapred-site.xml、yarn-site.xml ）
-        1. yarn-site.xml
-            ```vi $HADOOP_HOME/etc/hadoop/yarn-site.xml```
-            在<configuration>标签中加入以下内容：
+        1. yarn-site.xml  
+            ```vi $HADOOP_HOME/etc/hadoop/yarn-site.xml```  
+            在<configuration>标签中加入以下内容：  
             ```
             <property>
                 <name>yarn.nodemanager.aux-services</name>
@@ -163,9 +157,9 @@ mkdir -p $HADOOP_HOME/yarn/tmp
                 <value>impala43:8088</value>
             </property>
             ```
-        2. core-site.xml
-            ```vi $HADOOP_HOME/etc/hadoop/core-site.xml```
-            在<configuration>标签中加入下面内容在配置：
+        2. core-site.xml  
+            ```vi $HADOOP_HOME/etc/hadoop/core-site.xml```  
+            在<configuration>标签中加入下面内容在配置：  
             ```
             <property>
                 <name>fs.defaultFS</name>
@@ -188,12 +182,12 @@ mkdir -p $HADOOP_HOME/yarn/tmp
                 <name>hadoop.proxyuser.hduser.groups</name>
                 <value>*</value>
             </property>
-             ` ``
-        3. hdfs-stie.xml
+             ```
+        3. hdfs-stie.xml  
         ```
             vi $HADOOP_HOME/etc/hadoop/hdfs-site.xml
-        ```
-            在<configuration>标签中加入下面内容在配置：
+        ```  
+            在<configuration>标签中加入下面内容在配置：  
             ```
             <property>
                 <name>dfs.namenode.secondary.http-address</name>
@@ -215,13 +209,13 @@ mkdir -p $HADOOP_HOME/yarn/tmp
                 <name>dfs.webhdfs.enabled</name>
                 <value>true</value>
             </property>
-            ```
-        4. mapred-site.xml
+            ```  
+        4. mapred-site.xml  
             ```
             mv mapred-site.xml.template mapred-site.xml 
             vim mapred-site.xml
-            ```
-            在<configuration>标签中加入下面内容在配置：
+            ```  
+            在<configuration>标签中加入下面内容在配置：  
             ```
             <property>
                 <name>mapreduce.framework.name</name>
@@ -235,12 +229,13 @@ mkdir -p $HADOOP_HOME/yarn/tmp
                 <name>mapreduce.jobhistory.webapp.address</name>
                 <value>impala43:19888</value>
             </property>
-            ```
-        5. slaves
-            `vi $HADOOP_HOME/etc/hadoop/slaves`将原来localhost删除，把所有Slave的主机名写上，每行一个
+            ```  
+        5. slaves  
+            `vi $HADOOP_HOME/etc/hadoop/slaves`  
+            将原来localhost删除，把所有Slave的主机名写上，每行一个
   5.运行hadoop
       1. 初始化hadoop `bin/hdfs namenode -format       # 首次运行需要执行一次文件系统的初始化，后面不再需要`
-      2. 启动hadoop
+      2. 启动hadoop  
       ```
       sbin/start-dfs.sh
       sbin/start-yarn.sh
