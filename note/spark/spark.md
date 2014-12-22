@@ -68,16 +68,16 @@ spark可以运行于Hadoop YARN或者Apache Mesos上。
         
      - 进一步了解spark工作方式：[A-Deeper-Understanding-of-Spark-Internals](http://spark-summit.org/wp-content/uploads/2014/07/A-Deeper-Understanding-of-Spark-Internals-Aaron-Davidson.pdf)
 
-##1)优缺点
+##1. 优缺点
 
 1. 比MR更有效率
     - 支持迭代和cache
     - 迭代次数更多
 2. 支持常见的机器学习算法（via MLlib）
 
-##2)适用场景
+##2. 适用场景
   
-##3)同类对比
+##3. 同类对比
 
   //TODO
   
@@ -90,23 +90,25 @@ spark可以运行于Hadoop YARN或者Apache Mesos上。
           
   - 从原代码编译安装
     1. 下载源代码，地址：http://d3kbcqa49mib13.cloudfront.net/spark-1.1.1.tgz
-    2. 配置mvn编译环境，注意：若不是jdk8需要在环境变量中加入
-                ```
+    2. 配置mvn编译环境，注意：若不是jdk8需要在环境变量中加入  
+```
 export MAVEN_OPTS="-Xmx2g -XX:MaxPermSize=512M -XX:ReservedCodeCacheSize=512m"
-                ```
-    3. mvn编译
-        mvn -Pyarn -Phadoop-2.4 -Dhadoop.version=2.4.0 -Phive -DskipTests clean package
+```
+    3. mvn编译  
+      ```
+      mvn -Pyarn -Phadoop-2.4 -Dhadoop.version=2.4.0 -Phive -DskipTests clean package
+      ```    
     4. 安装hadoop
       1. 下载地址： https://archive.apache.org/dist/hadoop/core/hadoop-2.4.0/hadoop-2.4.0.tar.gz ,解压到/home/spark/hadoop/hadoop-2.4.0
       2. 配置无密码登录
         1. 在~/.ssh/下执行`ssh-keygen -t rsa`
         2. 然后执行`ssh-copy-id -i id_rsa.pub spark@172.16.236.44`将公钥拷贝集群中所有的机器上
-        3. 配置host
-```
-sudo vim /etc/hostname #给每台机器分配主机名
-sudo vim /etc/hosts #在每台主机的hosts文件中加入集群中所有的主机名
-```    
-        4. 增加环境变量
+        3. 配置host   
+          ```
+          sudo vim /etc/hostname #给每台机器分配主机名  
+          sudo vim /etc/hosts #在每台主机的hosts文件中加入集群中所有的主机名
+          ```    
+        4. 增加环境变量  
           ```
           export HADOOP_HOME=/home/spark/hadoop/hadoop-2.4.0
           export HADOOP_MAPRED_HOME=$HADOOP_HOME
