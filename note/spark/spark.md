@@ -1,7 +1,8 @@
 #Index
 
 #一、简介
- - spark是一款开源的集群计算框架。最初是由berkeley的AMPLab开发。与hadoop的基于硬盘的两阶段mapreduce不同，采用内存的方式，允许用户将数据加载到集群内存中，并运行反复查询。
+spark是一款开源的集群计算框架。最初是由berkeley的AMPLab开发。与hadoop的基于硬盘的两阶段mapreduce不同，采用内存的方式，允许用户将数据加载到集群内存中，并运行反复查询。
+
 spark非常适合机器学习算法。
 spark支持许多文件或存储系统作为数据源，如hdfs、cassandra、HBase、amazon S3
 spark可以运行于Hadoop YARN或者Apache Mesos上。
@@ -52,6 +53,7 @@ spark可以运行于Hadoop YARN或者Apache Mesos上。
        - standLone [standalone Mode](https://spark.apache.org/docs/latest/spark-standalone.html)
        - Apache Mesos
        - Hadoop YARN
+       
      - 术语
         - Application：用户在spark上建立的程序，由driver program 和集群上的executors组成。
         - Application jar： 含有用户程序的jar，务必不要包含spark或hadoop的库
@@ -67,6 +69,7 @@ spark可以运行于Hadoop YARN或者Apache Mesos上。
      - 进一步了解spark工作方式：[A-Deeper-Understanding-of-Spark-Internals](http://spark-summit.org/wp-content/uploads/2014/07/A-Deeper-Understanding-of-Spark-Internals-Aaron-Davidson.pdf)
 
 ##1)优缺点
+
 1. 比MR更有效率
     - 支持迭代和cache
     - 迭代次数更多
@@ -75,9 +78,13 @@ spark可以运行于Hadoop YARN或者Apache Mesos上。
 ##2)适用场景
   
 ##3)同类对比
+
   //TODO
+  
 #二、部署和使用
+
 ##1. 集群部署
+
   - 运行已编译包
     - 下载地址：http://d3kbcqa49mib13.cloudfront.net/spark-1.1.1-bin-hadoop2.4.tgz
           
@@ -86,14 +93,15 @@ spark可以运行于Hadoop YARN或者Apache Mesos上。
     2. 配置mvn编译环境，注意：若不是jdk8需要在环境变量中加入
     `export MAVEN_OPTS="-Xmx2g -XX:MaxPermSize=512M -XX:ReservedCodeCacheSize=512m"`
     3. mvn编译
-    ```mvn -Pyarn -Phadoop-2.4 -Dhadoop.version=2.4.0 -Phive -DskipTests clean package```
+    
+      ```mvn -Pyarn -Phadoop-2.4 -Dhadoop.version=2.4.0 -Phive -DskipTests clean package```
     
     4. 安装hadoop
         1. 下载地址： https://archive.apache.org/dist/hadoop/core/hadoop-2.4.0/hadoop-2.4.0.tar.gz ,解压到/home/spark/hadoop/hadoop-2.4.0
         2. 配置无密码登录
            1. 在～/.ssh/下执行`ssh-keygen -t rsa`
            2. 然后执行`ssh-copy-id -i id_rsa.pub spark@172.16.236.44`将公钥拷贝集群中所有的机器上
-        3. 配置host
+        3. 配置host        
           ```
           sudo vim /etc/hostname #给每台机器分配主机名
           sudo vim /etc/hosts #在每台主机的hosts文件中加入集群中所有的主机名
@@ -117,7 +125,7 @@ spark可以运行于Hadoop YARN或者Apache Mesos上。
               1. yarn-site.xml
                   `vi $HADOOP_HOME/etc/hadoop/yarn-site.xml`
                   在<configuration>标签中加入以下内容：
-                  `
+                  ```
                   <property>
                       <name>yarn.nodemanager.aux-services</name>
                       <value>mapreduce_shuffle</value>
@@ -146,11 +154,11 @@ spark可以运行于Hadoop YARN或者Apache Mesos上。
                       <name>yarn.resourcemanager.webapp.address</name>
                       <value>impala43:8088</value>
                   </property>
-                  `
+                  ```
               2. core-site.xml
                   ```vi $HADOOP_HOME/etc/hadoop/core-site.xml```
                   在<configuration>标签中加入下面内容在配置：
-                  `
+                  ```
                   <property>
                       <name>fs.defaultFS</name>
                       <value>hdfs://impala43:9000</value>
@@ -172,7 +180,7 @@ spark可以运行于Hadoop YARN或者Apache Mesos上。
                       <name>hadoop.proxyuser.hduser.groups</name>
                       <value>*</value>
                   </property>
-                   ` 
+                   ` ``
               3. hdfs-stie.xml
               ```
                   vi $HADOOP_HOME/etc/hadoop/hdfs-site.xml
@@ -221,39 +229,39 @@ spark可以运行于Hadoop YARN或者Apache Mesos上。
                   </property>
                   ```
               5. slaves
-                  `vi $HADOOP_HOME/etc/hadoop/slaves`
-                  将原来localhost删除，把所有Slave的主机名写上，每行一个
+                  `vi $HADOOP_HOME/etc/hadoop/slaves`将原来localhost删除，把所有Slave的主机名写上，每行一个
     5.运行hadoop
-        1. 执行 `bin/hdfs namenode -format       # 首次运行需要执行一次文件系统的初始化，后面不再需要`
-        2. 
+        1. 初始化hadoop `bin/hdfs namenode -format       # 首次运行需要执行一次文件系统的初始化，后面不再需要`
+        2. 启动hadoop
         ```
         sbin/start-dfs.sh
         sbin/start-yarn.sh
         ```
+        
 ##2.使用
 
-- 通过SHELL执行任务（scala）:
-```./bin/spark-shell```
-- 通过提交任务jar包:
-```./spark-submit```
+- 通过SHELL执行任务（scala）:`./bin/spark-shell`
+
+- 通过提交任务jar包:`./spark-submit`
   - 用法：
-  ```
-    ./bin/spark-submit 
-      --class <main-class>
-      --master <master-url> 
-      --deploy-mode <deploy-mode> 
-      --conf <key>=<value> 
-      ... 
-      <application-jar> 
-      [application-arguments]
-  ```    
-      master表示要集群地址或者local
-- eg:
-```
-SPARK_JAR=./assembly/target/scala-2.10/spark-assembly-1.1.1-hadoop2.4.0.jar
-HADOOP_CONF_DIR=/home/spark/hadoop/hadoop-2.4.0/etc/hadoop 
-./bin/spark-submit --master yarn --deploy-mode cluster --class org.apache.spark.examples.SparkPi --num-executors 3 --driver-memory 4g --executor-memory 2g --executor-cores 1 examples/target/scala-2.10/spark-examples-1.1.1-hadoop2.4.0.jar
-```
+    ```
+      ./bin/spark-submit 
+        --class <main-class>
+        --master <master-url> 
+        --deploy-mode <deploy-mode> 
+        --conf <key>=<value> 
+        ... 
+        <application-jar> 
+        [application-arguments]
+    ```  
+  - 注释：
+    - master表示要集群地址或者local
+  - eg:  
+    ```
+    SPARK_JAR=./assembly/target/scala-2.10/spark-assembly-1.1.1-hadoop2.4.0.jar
+    HADOOP_CONF_DIR=/home/spark/hadoop/hadoop-2.4.0/etc/hadoop 
+    ./bin/spark-submit --master yarn --deploy-mode cluster --class org.apache.spark.examples.SparkPi --num-executors 3 --driver-memory 4g --executor-memory 2g --executor-cores 1 examples/target/scala-2.10/spark-examples-1.1.1-hadoop2.4.0.jar
+    ```
         
 ##3.监控
 
@@ -261,6 +269,8 @@ HADOOP_CONF_DIR=/home/spark/hadoop/hadoop-2.4.0/etc/hadoop
 - 当使用spark On Yarn时，使用地址：http://172.16.236.43:8088/cluster
 
 ##4.java编程指导
+
+
   1. 初始化spark
       - eg:  
       ```
@@ -271,22 +281,22 @@ HADOOP_CONF_DIR=/home/spark/hadoop/hadoop-2.4.0/etc/hadoop
   2. 构建RDD对象
     - 法1 Parallelized Collections
       - eg :   
-    ```
-      List<Integer> data = Arrays.asList(1, 2, 3, 4, 5);
-      JavaRDD<Integer> distData = sc.parallelize(data);//sc.parallelize(data, 10); 10 是手工指定的slice（切片）数
-    ```
+      ```
+        List<Integer> data = Arrays.asList(1, 2, 3, 4, 5);
+        JavaRDD<Integer> distData = sc.parallelize(data);//sc.parallelize(data, 10); 10 是手工指定的slice（切片）数
+      ```
     - 法2 External Datasets
       - eg：  
-    ```
-      JavaRDD<String> distFile = sc.textFile("data.txt");//sc.textFile("data.txt", 128); 128 是手工指定的slice（切片）数,对于HDFS默认值是64M
-    ```
+      ```
+        JavaRDD<String> distFile = sc.textFile("data.txt");//sc.textFile("data.txt", 128); 128 是手工指定的slice（切片）数,对于HDFS默认值是64M
+      ```
   
   3. 操作RDD对象
-      - 两种方式：transformation、action
+      两种方式：transformation、action
           - transformation : 从存在的RDD对象创建新的RDD对象（eg：map，reduceByKey）
           - action ： driver Program运行的最后执行的动作，返回最终的RDD对象 （eg： reduce）
    
-      - 特点： 所有的transformation都是lazy的，即，当action操作需要返回结果时transformation才开始计算，优点是提高计算效率。即计算完成时将最终的结果返回给driverProgram，而不是每一步的中间结果。
+      特点： 所有的transformation都是lazy的，即，当action操作需要返回结果时transformation才开始计算，优点是提高计算效率。即计算完成时将最终的结果返回给driverProgram，而不是每一步的中间结果。
       
       - transfomration操作：
         - map(func)： Return a new distributed dataset formed by passing each element of the source through a function func.
@@ -324,28 +334,30 @@ HADOOP_CONF_DIR=/home/spark/hadoop/hadoop-2.4.0/etc/hadoop
         - saveAsObjectFile(path) 	 Write the elements of the dataset in a simple format using Java serialization, which can then be loaded using SparkContext.objectFile().
         - countByKey()	 Only available on RDDs of type (K, V). Returns a hashmap of (K, Int) pairs with the count of each key.
         - foreach(func)	 Run a function func on each element of the dataset. This is usually done for side effects such as updating an accumulator variable (see below) or interacting with external storage systems.
+        
   4. 持久化RDD对象
-     - 当持久化一个RDD对象时，会在每个节点的内存上存储该对象的一部分（partition）。当你采用迭代算法时，缓存过的RDD对象会大幅提升计算效率。
-     - spark的cache的另一个特点是，它是fault-tolerant的。即当一个partition丢失的话，会从原始的对象开始通过transformation重建它。
+     当持久化一个RDD对象时，会在每个节点的内存上存储该对象的一部分（partition）。当你采用迭代算法时，缓存过的RDD对象会大幅提升计算效率。
      
+     spark的cache的另一个特点是，它是fault-tolerant的。即当一个partition丢失的话，会从原始的对象开始通过transformation重建它。
      - 持久化方法：
         - persist（） 当第一次运行完成后，调用该方法的rdd对象会保存在内存中
         - cache（） 是持久化的一种特例，即
   5. 给spark传递一个函数
     - 方法： 给操作RDD对象的方法传递一个Function匿名内部类，其中的call方法实现计算逻辑  
-  ```
-  JavaRDD<String> lines = sc.textFile("data.txt");
-  JavaRDD<Integer> lineLengths = lines.map(new Function<String, Integer>() {
-    public Integer call(String s) { return s.length(); }
-  });
-  int totalLength = lineLengths.reduce(new Function2<Integer, Integer, Integer>() {
-    public Integer call(Integer a, Integer b) { return a + b; }
-  });
-  ```
+    ```
+    JavaRDD<String> lines = sc.textFile("data.txt");
+    JavaRDD<Integer> lineLengths = lines.map(new Function<String, Integer>() {
+      public Integer call(String s) { return s.length(); }
+    });
+    int totalLength = lineLengths.reduce(new Function2<Integer, Integer, Integer>() {
+      public Integer call(Integer a, Integer b) { return a + b; }
+    });
+    ```
     
   6. 操作键值对
-    - 用scala.Tuple2对象来包装一个键值对，`new Tuple2(a,b)`创建；tuple._1(),tuble._2()访问键和值
-    - RDD采用键值对对象为JavaPairRDD
+    用scala.Tuple2对象来包装一个键值对，`new Tuple2(a,b)`创建；tuple._1(),tuble._2()访问键和值
+    
+    RDD采用键值对对象为JavaPairRDD
     - eg：统计一个文件中同样的行出现的次数  
     ```
       JavaRDD<String> lines = sc.textFile("data.txt");
