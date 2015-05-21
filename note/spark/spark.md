@@ -1,4 +1,4 @@
-#Index
+k#Index
 
 #一、简介
 spark是一款开源的集群计算框架。最初是由berkeley的AMPLab开发。与hadoop的基于硬盘的两阶段mapreduce不同，采用内存的方式，允许用户将数据加载到集群内存中，并运行反复查询。
@@ -183,10 +183,8 @@ mkdir -p $HADOOP_HOME/yarn/tmp
                 <value>*</value>
             </property>
              ```
-        3. hdfs-stie.xml  
-        ```
-            vi $HADOOP_HOME/etc/hadoop/hdfs-site.xml
-        ```  
+        3. hdfs-site.xml  
+            ```vi $HADOOP_HOME/etc/hadoop/hdfs-site.xml```  
             在<configuration>标签中加入下面内容在配置：  
             ```
             <property>
@@ -369,3 +367,4 @@ mkdir -p $HADOOP_HOME/yarn/tmp
     ```
 
 #三、常见问题
+
