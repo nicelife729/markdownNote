@@ -1,0 +1,67 @@
+{
+  "l": {
+    "_source": {
+      "enabled": false
+    },
+    "_all": {
+      "enabled": false
+    },
+    "properties": {
+      "l_d": {
+        "index": "not_analyzed",
+        "store": false,
+        "fielddata": {
+          "format": "doc_values"
+        },
+        "doc_values": true,
+        "type": "date",
+        "format": "epoch_millis"
+      },
+      "l_o": {
+        "index": "no",
+        "store": false,
+        "fielddata": {
+          "format": "doc_values"
+        },
+        "doc_values": true,
+        "type": "double"
+      },
+      "l_h": {
+        "index": "no",
+        "store": false,
+        "fielddata": {
+          "format": "doc_values"
+        },
+        "doc_values": true,
+        "type": "double"
+      },
+      "l_l": {
+        "index": "no",
+        "store": false,
+        "fielddata": {
+          "format": "doc_values"
+        },
+        "doc_values": true,
+        "type": "double"
+      },
+      "l_c": {
+        "index": "no",
+        "store": false,
+        "fielddata": {
+          "format": "doc_values"
+        },
+        "doc_values": true,
+        "type": "double"
+      },
+      "l_v": {
+        "index": "no",
+        "store": false,
+        "fielddata": {
+          "format": "doc_values"
+        },
+        "doc_values": true,
+        "type": "double"
+      }
+    }
+  }
+}
