@@ -85,12 +85,13 @@ otter.zookeeper.cluster.default = 172.16.33.2:2181
 
 访问：http://127.0.0.1:8080/login.htm，初始密码为：admin/admin，即可完成登录. 目前：匿名用户只有只读查看的权限，登录为管理员才可以有操作权限
 
-建立zk集群
-建立机器列表 生成nid
+4.1 建立zk集群
+4.2 建立机器列表 生成nid
 
 ps:
 机器端口：对应node节点将要部署时启动的数据通讯端口，建议值：2088
 下载端口：对应node节点将要部署时启动的数据下载端口，建议值：9090
+
 
 5 aria2
 http多线程传输
@@ -109,6 +110,8 @@ vi conf/otter.properties
    ##对应manager中otter.properties的配置  otter.communication.manager.port
 ```
 
+
+建表
 
 ```
 DROP TABLE IF EXISTS `users`;
