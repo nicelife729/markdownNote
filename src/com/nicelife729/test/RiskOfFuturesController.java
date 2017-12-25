@@ -43,6 +43,28 @@ public class RiskOfFuturesController {
   private Open getproductionOpenOfFutures(String institutionGuid, String fundCode, String beginDate, String endDate) {
     return null;
   }
-
-  private HoldWeight get
+  
+  /**
+   * 获取产品的期货持仓的品种权重序列
+   * @param institutionGuid 机构uuid
+   * @param fundCode 产品代码
+   * @param beginDate 起点时间
+   * @param endDate 结束时间
+   * @return
+   */
+  private HoldWeight getVarietyWeightOfFutures(String institutionGuid, String fundCode, String beginDate, String endDate) {
+    return null;
+  }
+  
+  /**
+   * 获取产品的期货持仓的板块权重序列
+   * @param institutionGuid 机构uuid
+   * @param fundCode 产品代码
+   * @param beginDate 起点时间
+   * @param endDate 结束时间
+   * @return
+   */
+  private HoldWeight getPlateWeightOfFutures(String institutionGuid, String fundCode, String beginDate, String endDate) {
+    return null;
+  }
 }

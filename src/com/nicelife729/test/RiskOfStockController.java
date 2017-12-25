@@ -46,6 +46,18 @@ public class RiskOfStockController {
   private List<HeavyPositions> getHeavyPositionOfStock(String institutionGuid, String fundCode, String beginDate, String endDate) {
     return null;
   }
+  
+  /**
+   * 获取产品查询时间段内的除了前10只重仓股之外其它股票的占比
+   * @param institutionGuid
+   * @param fundCode
+   * @param beginDate
+   * @param endDate
+   * @return
+   */
+  private List<HeavyPositions> getExceptHeavyPositionOfStock(String institutionGuid, String fundCode, String beginDate, String endDate) {
+    return null;
+  }
 
   /**
    * 获得产品查询时段内的持股数序列

@@ -9,7 +9,7 @@ public class HeavyPositions {
    */
   private String StockCode;
   /**
-   * 10只股票中本只所占百分比
+   * 股票列表中本只所占百分比
    */
   private Double percent;
 }
