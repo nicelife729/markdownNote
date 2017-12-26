@@ -2,19 +2,16 @@ package com.nicelife729.test.bean;
 
 import java.util.List;
 
-/**
- * Created by yoyoadm on 17-12-21.
- */
-public class Lever {
+public class DealHands {
   /**
    * 交易日历序列
    */
   private List<String> calenderList;
 
   /**
-   * 杠杆比例序列
+   * 成交量(成交手数)序列
    */
-  private List<Double> leverList;
+  private List<Integer> dealHandsList;
 
   public List<String> getCalenderList() {
     return calenderList;
@@ -24,11 +21,11 @@ public class Lever {
     this.calenderList = calenderList;
   }
 
-  public List<Double> getLeverList() {
-    return leverList;
+  public List<Integer> getDealHandsList() {
+    return dealHandsList;
   }
 
-  public void setLeverList(List<Double> leverList) {
-    this.leverList = leverList;
+  public void setDealHandsList(List<Integer> dealHandsList) {
+    this.dealHandsList = dealHandsList;
   }
 }
